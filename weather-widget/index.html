@@ -263,6 +263,7 @@
 
     //fetch weather data
     var date = new Date();
+    // fetch(`https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${lat}&lon=${lon}&units=${units}&dt=${Math.floor(Date.now()/1000)}&appid=${appId}`)
     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=${units}&appid=${appId}`)
       .then(response => response.json())
       .then(data => {
@@ -280,7 +281,7 @@
   //update all information for each place
   function update () {
     var today = new Date()
-    var time = moment().format('hh:mm')
+    var time = moment().format('HH:mm')
     var uviColor = "red"
     var uviImgColor = "invert(18%) sepia(98%) saturate(6985%) hue-rotate(1deg) brightness(104%) contrast(117%)"
     if (currentWeather.uvi < 3) {
@@ -320,13 +321,14 @@
   }
 
   function buildChart () {
-    const maxForecastHours = 6
+    const maxForecastHours = 10
     var labels = []
     var temperatureData = []
     var popData = []
 
     for (var i = 0; i < Math.min(hourlyForecast.length, maxForecastHours); i++) {
-      // if (moment.unix(hourlyForecast[i].dt).hour() >= 19) break
+      console.log(moment.unix(hourlyForecast[i].dt).hour())
+      // if (moment.unix(hourlyForecast[i].dt).hour() < 6 || moment.unix(hourlyForecast[i].dt).hour() > 18) continue
       labels.push(moment.unix(hourlyForecast[i].dt).format('HH:mm'))
       temperatureData.push(Math.round(hourlyForecast[i].temp))
       popData.push(hourlyForecast[i].pop * 100)
@@ -374,6 +376,8 @@
                 display: false
               },
               ticks : {
+                // min : -20,
+                // max : 20,
                 stepSize : 0.5,
                 fontColor: 'rgba(255, 129, 1, 0.6)'
               }
@@ -390,6 +394,8 @@
                 display: false
               },
               ticks : {
+                min : 0,
+                max : 100,
                 stepSize : 10,
                 fontColor: 'rgba(0, 205, 205, 0.6)'
               }
