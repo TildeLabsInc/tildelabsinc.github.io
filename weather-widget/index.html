@@ -327,7 +327,7 @@
     var popData = []
 
     for (var i = 0; i < Math.min(hourlyForecast.length, maxForecastHours); i++) {
-      console.log(moment.unix(hourlyForecast[i].dt).hour())
+      // console.log(moment.unix(hourlyForecast[i].dt).hour())
       // if (moment.unix(hourlyForecast[i].dt).hour() < 6 || moment.unix(hourlyForecast[i].dt).hour() > 18) continue
       labels.push(moment.unix(hourlyForecast[i].dt).format('HH:mm'))
       temperatureData.push(Math.round(hourlyForecast[i].temp))
