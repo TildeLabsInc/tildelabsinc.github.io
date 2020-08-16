@@ -320,7 +320,12 @@
       // document.querySelector('.wind span.unit').innerHTML = " km/h"
       document.querySelector('.wind-dir').style.transform = "rotate(" + currentWeather.wind_deg + "deg)"
 
-      document.querySelector('.wind-gust span.value').innerHTML = Math.round(currentWeather.wind_gust * 60 * 60 / 1000)
+      if (currentWeather.wind_gust) {
+        document.querySelector('.wind-gust span.value').innerHTML = Math.round(currentWeather.wind_gust * 60 * 60 / 1000)
+      } else {
+        document.querySelector('.wind-gust span.value').innerHTML = 0
+      }
+      
       // document.querySelector('.wind-gust span.unit').innerHTML = " km/h"
 
       document.querySelector('.humidity span.value').innerHTML = currentWeather.humidity
