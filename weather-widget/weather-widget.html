@@ -1,0 +1,446 @@
+<html lang="en" style=""
+  class=" js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths -webkit-">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Weather widget</title>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script> -->
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #FFFFFF;
+      font-family: Montserrat, Arial, sans-serif;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    h2 {
+      font-size: 14px;
+    }
+
+    .widget {
+      margin: 0 auto;
+      position: relative;
+      width: 425px;
+      height: 215px;
+    }
+
+    .upper {
+      border-radius: 5px 5px 0 0;
+      background: #ffffff;
+      padding: 0px;
+    }
+
+    .upper .date {
+      font-size: 12px;
+    }
+
+    .upper .year {
+      font-size: 12px;
+      color: #c1c1c1;
+    }
+
+    .upper .time {
+      font-size: 12px;
+      color: #c1c1c1;
+    }
+
+    .upper .place {
+      color: #222;
+      font-size: 12px;
+    }
+
+    .upper .temp {
+      font-size: 40px;
+    }
+
+    .upper .feels-like-temp {
+      font-size: 12px;
+      color: gray;
+    }
+
+    .upper .icon {
+      text-align: right;
+    }
+
+    .upper .des {
+      text-align: right;
+    }
+
+    .upper .des::first-letter {
+      text-transform: capitalize;
+    }
+
+    .upper .w-info {
+      margin-top: 15px;
+      margin-bottom: 2px;
+      margin-right: 0px;
+      margin-left: 0px;
+      font-size: 25px;
+    }
+
+    .upper .w-info-row-2 {
+      margin-top: 10px;
+    }
+
+    .upper .w-info>div {
+      display: inline-block;
+      float: left;
+      width: 33.33333%;
+      text-align: left;
+    }
+
+    .upper .w-info img {
+      width: 25px;
+      padding-right: 2px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .upper .w-info span {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: normal;
+    }
+
+    .upper .w-info span.unit {
+      font-size: 10px;
+      margin-bottom: 4px;
+      margin-left: 2px;
+      vertical-align: bottom;
+      line-height: 1.1;
+    }
+
+    .upper .w-info .wind-dir {
+      width: 20px;
+      position: relative;
+      left: -37px;
+      top: -6px;
+    }
+
+    #hourly_forecast .header {
+      margin-top: 20px;
+      background: #98a2bbEE;
+      height: 25px;
+      width: 100%;
+    }
+
+    #hourly_forecast .header>h2 {
+      color: #FFFFFF;
+      font-weight: bold;
+      font-size: 16px;
+      text-align: center;
+      line-height: 25px;
+      vertical-align: middle;
+    }
+
+    .weather p {
+      font-size: 20px;
+      padding: 10px 0;
+    }
+
+    .anim {
+      animation: fade .8s linear;
+    }
+
+    #hourly_forecast {
+      margin-top: 10px;
+      background-color: #fcf8ff55;
+      width: 400px;
+      height: 215px;
+    }
+
+    #hourly_forecast h2 {
+      text-align: center;
+    }
+
+    @keyframes fade {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+</head>
+
+<body translate="no">
+  <div class="widget update anim">
+    <div class="upper">
+      <div class="row">
+        <div>
+          <span class="date">May 13</span>
+          <span class="year">2020</span>
+          <span class="time">10:16</span>
+        </div>
+        <div class="place update">Cornwall, PE</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="temp"><span>—<sup>o</sup>C</span></div>
+          <div class="feels-like-temp">Feels like: <span>—<sup>o</sup>C</span></div>
+        </div>
+        <div class="icon">
+          <div>
+            <img src="http://openweathermap.org/img/wn/04d@2x.png" width="45%">
+          </div>
+        </div>
+      </div>
+      <div class="description">
+        <span>overcast clouds</span>
+      </div>
+      <div class="row w-info">
+        <div class="wind">
+          <img src="https://img.icons8.com/dotty/100/000000/wind.png">
+          <span class="value">—</span><span class="unit">km/h</span>
+          <img class="wind-dir" src="https://img.icons8.com/ios/100/000000/down.png" style="transform: rotate(270deg);">
+        </div>
+        <div class="humidity">
+
+          <img src="https://img.icons8.com/ios/100/000000/hygrometer.png">
+          <span class="value">—</span><span class="unit">%</span>
+        </div>
+        <div class="pressure">
+          <img src="https://img.icons8.com/ios/100/000000/atmospheric-pressure.png">
+          <span class="value">—</span><span class="unit">kPa</span>
+        </div>
+      </div>
+      <div class="row w-info w-info-row-2">
+        <div class="wind-gust">
+          <img src="https://img.icons8.com/ios/100/000000/wind.png">
+          <span class="value">—</span><span class="unit">GUST<br />km/h</span>
+        </div>
+        <div class="uvi">
+          <img src="https://img.icons8.com/ios/100/000000/sun.png"
+            style="filter: invert(81%) sepia(34%) saturate(6546%) hue-rotate(358deg) brightness(100%) contrast(107%);">
+          <span class="value" style="color: orange;">6.2</span><span class="unit">MAX</span>
+        </div>
+        <div class="cloudiness">
+          <img src="https://img.icons8.com/ios/100/000000/clouds.png">
+          <span class="value">—</span><span class="unit">%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.3/moment.min.js" type="text/javascript"></script>
+  <script id="rendered-js">
+    const debug = true
+    const lat = "46.24"
+    const lon = "-63.13"
+    const appId = "c458144dcb333ecebc0dca40460acf7b"
+    const units = "metric"
+    var info = {};
+    var currentWeather = {}
+    const city = {
+      name: "Charlottetown",
+      country: "PE"
+    }
+    var monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
+    var current = 0;
+
+    function init() {
+      var date = new Date();
+      document.querySelector('.date').innerHTML = monthNames[date.getMonth()] + " " + date.getDate()
+      document.querySelector('.year').innerHTML = date.getFullYear()
+
+      //fetch weather data
+      var date = new Date();
+      // fetch(`https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${lat}&lon=${lon}&units=${units}&dt=${Math.floor(Date.now()/1000)}&appid=${appId}`)
+      fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=${units}&appid=${appId}`)
+        .then(response => response.json())
+        .then(data => {
+          currentWeather = data.current
+          hourlyForecast = data.hourly
+          update()
+        })
+        .catch((error) => {
+          console.error('Error:', error)
+        }
+        )
+    }
+    init()
+
+    //update all information for each place
+    function update() {
+      var today = new Date()
+      var time = moment().format('HH:mm')
+      var uviColor = "red"
+      var uviImgColor = "invert(18%) sepia(98%) saturate(6985%) hue-rotate(1deg) brightness(104%) contrast(117%)"
+      if (currentWeather.uvi < 3) {
+        uviColor = "green"
+        uviImgColor = "invert(21%) sepia(81%) saturate(7356%) hue-rotate(123deg) brightness(98%) contrast(103%)"
+      } else if (currentWeather.uvi < 6) {
+        uviColor = "gold"
+        uviImgColor = "invert(80%) sepia(68%) saturate(1454%) hue-rotate(359deg) brightness(102%) contrast(105%)"
+      } else if (currentWeather.uvi < 8) {
+        uviColor = "orange"
+        uviImgColor = "invert(81%) sepia(34%) saturate(6546%) hue-rotate(358deg) brightness(100%) contrast(107%)"
+      }
+
+      document.querySelector('.update').classList.add("anim")
+
+      document.querySelector('.time').innerHTML = time
+
+      document.querySelector('.place').innerHTML = city.name + ", " + city.country
+      document.querySelector('.temp span').innerHTML = Math.round(currentWeather.temp) + "<sup>o</sup>C"
+      document.querySelector('.feels-like-temp span').innerHTML = Math.round(currentWeather.feels_like) + "<sup>o</sup>C"
+      document.querySelector('.description span').innerHTML = currentWeather.weather[0].description
+      document.querySelector('.wind span.value').innerHTML = Math.round(currentWeather.wind_speed * 60 * 60 / 1000)
+      // document.querySelector('.wind span.unit').innerHTML = " km/h"
+      document.querySelector('.wind-dir').style.transform = "rotate(" + currentWeather.wind_deg + "deg)"
+
+      if (currentWeather.wind_gust) {
+        document.querySelector('.wind-gust span.value').innerHTML = Math.round(currentWeather.wind_gust * 60 * 60 / 1000)
+      } else {
+        document.querySelector('.wind-gust span.value').innerHTML = 0
+      }
+      
+      // document.querySelector('.wind-gust span.unit').innerHTML = " km/h"
+
+      document.querySelector('.humidity span.value').innerHTML = currentWeather.humidity
+      document.querySelector('.humidity span.unit').innerHTML = "%"
+      document.querySelector('.pressure span.value').innerHTML = currentWeather.pressure / 10
+      document.querySelector('.pressure span.unit').innerHTML = "kPa"
+      document.querySelector('.uvi span.value').innerHTML = Math.round(currentWeather.uvi)
+      document.querySelector('.uvi span.unit').innerHTML = "MAX"
+      document.querySelector('.uvi span.value').style.color = uviColor
+      document.querySelector('.uvi span.unit').style.color = uviColor
+      document.querySelector('.uvi img').style.filter = uviImgColor
+
+      document.querySelector('.cloudiness span.value').innerHTML = currentWeather.clouds
+
+      document.querySelector('.icon div img').src = getWeatherIconUrl(currentWeather.weather[0].icon)
+
+      buildChart()
+
+      current = (current + 1) % 18;
+      setTimeout(update, 60000);
+    }
+
+    function buildChart() {
+      const maxForecastHours = 10
+      var labels = []
+      var temperatureData = []
+      var popData = []
+
+      for (var i = 0; i < Math.min(hourlyForecast.length, maxForecastHours); i++) {
+        // console.log(moment.unix(hourlyForecast[i].dt).hour())
+        // if (moment.unix(hourlyForecast[i].dt).hour() < 6 || moment.unix(hourlyForecast[i].dt).hour() > 18) continue
+        labels.push(moment.unix(hourlyForecast[i].dt).format('HH:mm'))
+        temperatureData.push(Math.round(hourlyForecast[i].temp))
+        popData.push(hourlyForecast[i].pop * 100)
+
+      }
+
+
+      var hourlyForecastChart = new Chart('hourlyForecastChart', {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Temperature',
+              yAxisID: 'Temperature',
+              data: temperatureData,
+              backgroundColor: 'rgba(255, 129, 1, 0.0)',
+              borderColor: 'rgba(255, 129, 1, 1)',
+              pointBorderColor: 'rgba(0,0,0,0)',
+              borderWidth: 2,
+            },
+            {
+              label: 'Precipitation',
+              yAxisID: 'Precipitation',
+              data: popData,
+              backgroundColor: 'rgba(0, 205, 205, 0.0)',
+              borderColor: 'rgba(0, 205, 205, 1)',
+              pointBorderColor: 'rgba(0,0,0,0)',
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          scales: {
+            yAxes: [
+              {
+                id: 'Temperature',
+                scaleLabel: {
+                  display: false,
+                  labelString: '°C',
+                },
+                type: 'linear',
+                position: 'left',
+                gridLines: {
+                  display: false
+                },
+                ticks: {
+                  // min : -20,
+                  // max : 20,
+                  stepSize: 0.5,
+                  fontColor: 'rgba(255, 129, 1, 0.6)'
+                }
+              },
+              {
+                id: 'Precipitation',
+                scaleLabel: {
+                  display: false,
+                  labelString: '%'
+                },
+                type: 'linear',
+                position: 'right',
+                gridLines: {
+                  display: false
+                },
+                ticks: {
+                  min: 0,
+                  max: 100,
+                  stepSize: 10,
+                  fontColor: 'rgba(0, 205, 205, 0.6)'
+                }
+              }
+            ]
+          }
+        }
+      })
+    }
+
+    //after fade animation has finished remove the class that caused it so it can be reused
+    document.querySelector('.update').addEventListener("webkitAnimationEnd oAnimationEnd msAnimationEnd animationend", function () {
+      document.querySelector('.update').classList.remove("anim")
+    })
+
+    function getWeatherIconUrl(icon, size = "4x") {
+      return `http://openweathermap.org/img/wn/${icon}@${size}.png`
+    }
+  </script>
+
+
+</body>
+
+</html>
