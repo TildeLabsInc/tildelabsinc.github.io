@@ -29,9 +29,10 @@
     }
 
     .widget {
-      margin: 20px;
-      height: 215px;
+      margin: 0 auto;
       position: relative;
+      width: 425px;
+      height: 450px;
     }
 
     .upper {
@@ -41,6 +42,7 @@
       /* height: 210px; */
       padding: 0px;
       width: 400px;
+      height: 215px;
     }
 
     .upper .date {
@@ -159,6 +161,7 @@
       margin-top: 10px;
       background-color: #fcf8ff55;
       width: 400px;
+      height: 215px;
     }
 
     #hourly_forecast h2 {
@@ -184,13 +187,21 @@
       }
     }
     @media screen and (min-width: 825px) {
+      .widget {
+        /* display: inline-block; */
+        width: 900px;
+      }
+
       #vertical_bar {
-        display: block;
-        float: left;
+        display: inline-block;
+        vertical-align: top;
+        /* float: left; */
       }
       #hourly_forecast, .upper {
-        float: left;
+        /* float: left; */
         margin-top: 0;
+        display: inline-block;
+        vertical-align: top;
       }
       #hourly_forecast .header {
         margin-top: 0;
